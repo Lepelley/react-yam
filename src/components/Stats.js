@@ -3,17 +3,9 @@ import { useSelector } from 'react-redux'
 import { FirebaseDatabaseMutation, FirebaseDatabaseNode } from '@react-firebase/database'
 
 const Stats = () => {
-  const { brelan, carre, doublePaire, yam } = useSelector(state => state.stats)
+  const { brelan, carre, doublePaire, yam, noCombinaisons } = useSelector(state => state.stats)
 
   const path = 'yam/'
-
-  const stats = {
-    brelan: 0,
-    yam: 0,
-    carre: 0,
-    doublePaire: 0,
-    total: 0
-  }
 
   const percentToString = (value, total) => {
     return Math.round((value / total) * 1000) / 10
@@ -29,7 +21,7 @@ const Stats = () => {
               <button
                 data-testid='test-push'
                 onClick={async () => {
-                  await runMutation({ brelan, carre, doublePaire, yam })
+                  await runMutation({ brelan, carre, doublePaire, yam, noCombinaisons })
                 }}
                 className='btn btn-primary'
               >
@@ -51,6 +43,8 @@ const Stats = () => {
             <li>Brelan : {brelan} (trois dés identiques)</li>
 
             <li>Double paire : {doublePaire} (deux dés X 2 identiques)</li>
+
+            <li>Pas de combinaisons : {noCombinaisons}</li>
           </ul>
         </div>
 
@@ -64,12 +58,22 @@ const Stats = () => {
                 return null
               }
 
+              const stats = {
+                brelan: 0,
+                yam: 0,
+                carre: 0,
+                doublePaire: 0,
+                noCombinaisons: 0,
+                total: 0
+              }
+
               Object.values(value).forEach((value) => {
                 stats.brelan += value.brelan
                 stats.yam += value.yam
                 stats.carre += value.carre
                 stats.doublePaire += value.doublePaire
-                stats.total += value.brelan + value.yam + value.carre + value.doublePaire
+                stats.noCombinaisons += value.noCombinaisons
+                stats.total += value.brelan + value.yam + value.carre + value.doublePaire + value.noCombinaisons
               })
 
               return (
@@ -78,6 +82,7 @@ const Stats = () => {
                   <li>Carré : {stats.carre} ({percentToString(stats.carre, stats.total)}%)</li>
                   <li>Brelan : {stats.brelan} ({percentToString(stats.brelan, stats.total)}%)</li>
                   <li>Double paire : {stats.doublePaire} ({percentToString(stats.doublePaire, stats.total)}%)</li>
+                  <li>Pas de combinaisons : {stats.noCombinaisons} ({percentToString(stats.noCombinaisons, stats.total)}%)</li>
                   <li>Total : {stats.total}</li>
                 </ul>
               )
@@ -91,11 +96,12 @@ const Stats = () => {
         <FirebaseDatabaseNode path={path}>
           {data => data.value
             ? Object.values(data.value).map((value, index) => (
-              <p className='col-md-2' key={index}>
+              <p className='col-md-3' key={index}>
                 Yam : {value.yam}<br />
                 Carré : {value.carre}<br />
                 Brelan : {value.brelan}<br />
                 Double paire : {value.doublePaire}<br />
+                Pas de combi. : {value.noCombinaisons}<br />
               </p>
             ))
             : ''}

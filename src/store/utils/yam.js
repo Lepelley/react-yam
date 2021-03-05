@@ -35,6 +35,7 @@ export const findYamCombinaisons = (dices) => {
   let carre = 0
   let doublePaire = 0
   let yam = 0
+  let noCombinaisons = 0
 
   dices.forEach(turn => {
     const numbers = {
@@ -52,7 +53,15 @@ export const findYamCombinaisons = (dices) => {
     carre += isSquare(numbersArray) ? 1 : 0
     brelan += isBrelan(numbersArray) ? 1 : 0
     doublePaire += isDoublePaire(numbersArray) ? 1 : 0
+    noCombinaisons += (
+      isYam(numbersArray) ||
+      isSquare(numbersArray) ||
+      isBrelan(numbersArray) ||
+      isDoublePaire(numbersArray)
+    ) === false
+      ? 1
+      : 0
   })
 
-  return { brelan, carre, doublePaire, yam }
+  return { brelan, carre, doublePaire, yam, noCombinaisons }
 }

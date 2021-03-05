@@ -4,7 +4,7 @@ import { rollDices, setNumber } from '../store/actions/actions-type'
 const Game = () => {
   const dispatch = useDispatch()
 
-  const { number } = useSelector(state => state.yam)
+  const { number, dices } = useSelector(state => state.yam)
 
   const handleChange = (event) => {
     const { value } = event.target

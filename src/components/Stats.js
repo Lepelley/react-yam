@@ -8,7 +8,7 @@ const Stats = () => {
   const path = 'yam/'
 
   const percentToString = (value, total) => {
-    return Math.round((value / total) * 1000) / 10
+    return Math.round((value / total) * 10000) / 100
   }
 
   return (
@@ -96,14 +96,14 @@ const Stats = () => {
         <FirebaseDatabaseNode path={path}>
           {data => data.value
             ? Object.values(data.value).map((value, index) => (
-              <p className='col-md-3' key={index}>
-                Yam : {value.yam}<br />
-                Carré : {value.carre}<br />
-                Brelan : {value.brelan}<br />
-                Double paire : {value.doublePaire}<br />
-                Pas de combi. : {value.noCombinaisons}<br />
-              </p>
-            ))
+              <ul className='col-md-3' key={index}>
+                <li>Yam : {value.yam}</li>
+                <li>Carré : {value.carre}</li>
+                <li>Brelan : {value.brelan}</li>
+                <li>Double paire : {value.doublePaire}</li>
+                <li>Pas de combi. : {value.noCombinaisons}</li>
+              </ul>
+              ))
             : ''}
         </FirebaseDatabaseNode>
       </div>
